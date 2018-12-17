@@ -63,7 +63,7 @@ module vpc-network
 module security-group
 {
     source       = "github.com/devops4me/terraform-aws-security-group"
-    in_ingress   = [ "rabbitmq" ]
+    in_ingress   = [ "rmq-admin" ]
     in_vpc_id    = "${ module.vpc-network.out_vpc_id }"
 
     in_ecosystem_name     = "${ local.ecosystem_name }"

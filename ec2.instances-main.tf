@@ -38,6 +38,12 @@ resource aws_instance nodes
 }
 
 
+
+################################################################
+############## +++++++++++++++++++++++++++++++++ ###############
+############## Troubleshoot-ing Branch Resources ###############
+############## +++++++++++++++++++++++++++++++++ ###############
+
 /*
  | --
  | -- This bastion host can be used when one needs to get to those
@@ -72,6 +78,15 @@ resource aws_instance bastion
 }
 
 
+/*
+ | --
+ | -- This resource in the "troubleshoot" branch is looking out
+ | -- for an environment variable named TF_VAR_in_ssh_public_key
+ | --
+ | -- The environment variable shields the public key contents
+ | -- from the public repository.
+ | --
+*/
 resource aws_key_pair ssh
 {
     count = "${ signum( length( var.in_ssh_public_key ) ) }"

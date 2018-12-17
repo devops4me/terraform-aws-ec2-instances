@@ -46,7 +46,10 @@ module vpc-network
     in_vpc_cidr            = "10.66.0.0/16"
     in_num_public_subnets  = 3
     in_num_private_subnets = 0
-    in_ecosystem           = "${ local.ecosystem_name }"
+
+    in_ecosystem_name     = "${ local.ecosystem_name }"
+    in_tag_timestamp      = "${ module.resource-tags.out_tag_timestamp }"
+    in_tag_description    = "${ module.resource-tags.out_tag_description }"
 }
 
 
@@ -62,7 +65,10 @@ module security-group
     source       = "github.com/devops4me/terraform-aws-security-group"
     in_ingress   = [ "rabbitmq" ]
     in_vpc_id    = "${ module.vpc-network.out_vpc_id }"
-    in_ecosystem = "${ local.ecosystem_name }"
+
+    in_ecosystem_name     = "${ local.ecosystem_name }"
+    in_tag_timestamp      = "${ module.resource-tags.out_tag_timestamp }"
+    in_tag_description    = "${ module.resource-tags.out_tag_description }"
 }
 
 

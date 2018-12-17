@@ -2,12 +2,12 @@
 
 locals
 {
-    ecosystem_name = "fixed-size-cluster"
+    ecosystem_name = "instance-cluster"
     node_count     = 5
 }
 
 
-module fixed-size-cluster
+module instance-cluster
 {
     source                 = ".."
 
@@ -101,10 +101,10 @@ output out_rmq_password
 
 output out_public_ip_addresses
 {
-    value = "${ module.fixed-size-cluster.out_public_ip_addresses }"
+    value = "${ module.instance-cluster.out_public_ip_addresses }"
 }
 
 output out_private_ip_addresses
 {
-    value = "${ module.fixed-size-cluster.out_private_ip_addresses }"
+    value = "${ module.instance-cluster.out_private_ip_addresses }"
 }

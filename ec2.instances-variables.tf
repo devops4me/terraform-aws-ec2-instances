@@ -56,28 +56,6 @@ variable in_subnet_ids
 }
 
 
-### #################### ###
-### in_bastion_subnet_id ###
-### #################### ###
-
-variable in_bastion_subnet_id
-{
-    description = "The public subnet into which to create the bastion host."
-    default = ""
-}
-
-
-### ################# ###
-### in_ssh_public_key ###
-### ################# ###
-
-variable in_ssh_public_key
-{
-    description = "The public key for accessing both the DMZ bastion and the nodes behind enemy lines."
-    default = ""
-}
-
-
 ### ##################### ###
 ### in_security_group_ids ###
 ### ##################### ###

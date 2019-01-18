@@ -25,7 +25,7 @@ module instance-cluster
 
 module rabbitmq-ignition-config
 {
-    source        = "github.com/devops4me/terraform-ignition-rabbitmq-config"
+    source        = "github.com/devops4me/rabbitmq-systemd-cloud-config"
     in_node_count = "${ local.node_count }"
 }
 

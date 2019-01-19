@@ -15,7 +15,7 @@ module instance-cluster
     in_ami_id             = "${ module.coreos-ami-id.out_ami_id }"
     in_subnet_ids         = "${ module.vpc-network.out_public_subnet_ids }"
     in_security_group_ids = [ "${ module.security-group.out_security_group_id }" ]
-    in_user_data          = "${ module.rabbitmq-ignition-config.out_ignition_config }"
+    in_user_data          = "${ module.rabbitmq-cloud-config.out_ignition_config }"
 
     in_ecosystem_name     = "${ local.ecosystem_name }"
     in_tag_timestamp      = "${ module.resource-tags.out_tag_timestamp }"
@@ -23,7 +23,7 @@ module instance-cluster
 }
 
 
-module rabbitmq-ignition-config
+module rabbitmq-cloud-config
 {
     source        = "github.com/devops4me/rabbitmq-systemd-cloud-config"
     in_node_count = "${ local.node_count }"
@@ -96,7 +96,7 @@ module resource-tags
 
 output out_rmq_password
 {
-    value = "${ module.rabbitmq-ignition-config.out_rmq_password }"
+    value = "${ module.rabbitmq-cloud-config.out_rmq_password }"
 }
 
 output out_public_ip_addresses

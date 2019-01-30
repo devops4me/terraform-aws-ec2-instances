@@ -25,6 +25,8 @@ resource aws_instance nodes
     subnet_id              = "${ element( var.in_subnet_ids, count.index ) }"
     user_data              = "${ var.in_user_data }"
     vpc_security_group_ids = [ "${ var.in_security_group_ids }" ]
+    iam_instance_profile   = "${ module.s3-instance-profile.out_profile_name }"
+
 
     tags
     {
@@ -35,3 +37,14 @@ resource aws_instance nodes
         Route    = "This ec2 instance can connect externally through route ${ element( var.in_route_dependency, count.index ) } that serves subnet ${ element( var.in_subnet_ids, count.index ) }."
     }
 }
+
+
+module s3-instance-profile
+{
+    source = "github.com/devops4me/terraform-aws-s3-instance-profile"
+
+    in_ecosystem_name  = "${ var.in_ecosystem_name }"
+    in_tag_timestamp   = "${ var.in_tag_timestamp }"
+    in_tag_description = "${ var.in_tag_description }"
+}
+

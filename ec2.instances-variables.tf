@@ -68,6 +68,17 @@ variable in_security_group_ids
 
 
 ### ################# ###
+### in_ssh_public_key ###
+### ################# ###
+
+variable in_ssh_public_key
+{
+    description = "The public key for accessing both the DMZ bastion and the nodes behind enemy lines."
+    default = ""
+}
+
+
+### ################# ###
 ### in_ecosystem_name ###
 ### ################# ###
 

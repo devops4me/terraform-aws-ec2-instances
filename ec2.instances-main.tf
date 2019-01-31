@@ -26,7 +26,7 @@ resource aws_instance nodes
     user_data              = "${ var.in_user_data }"
     vpc_security_group_ids = [ "${ var.in_security_group_ids }" ]
     iam_instance_profile   = "${ module.s3-instance-profile.out_profile_name }"
-    key_name               = "${ element( aws_key_pair.ssh.*.id, 0 ) }"
+    key_name               = "${ aws_key_pair.ssh.id }"
 
     tags
     {
@@ -52,7 +52,7 @@ resource aws_instance nodes
 */
 resource aws_key_pair ssh
 {
-    count = "${ signum( length( var.in_ssh_public_key ) ) }"
+########    count = "${ signum( length( var.in_ssh_public_key ) ) }"
     key_name = "key-4-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
     public_key = "${ var.in_ssh_public_key }"
 }

@@ -34,7 +34,9 @@ resource aws_instance nodes
         Class    = "${ var.in_ecosystem_name }"
         Instance = "${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
         Desc     = "This cluster node no.${ ( count.index + 1 ) } of ${ var.in_node_count } for ${ var.in_ecosystem_name } ${ var.in_tag_description }"
+/*
         Route    = "This ec2 instance can connect externally through route ${ element( var.in_route_dependency, count.index ) } that serves subnet ${ element( var.in_subnet_ids, count.index ) }."
+*/
     }
 }
 

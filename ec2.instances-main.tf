@@ -20,13 +20,14 @@ resource aws_instance nodes
 {
     count = "${var.in_node_count}"
 
-    instance_type          = "${ var.in_instance_type }"
+    user_data              = "${ var.in_user_data }"
+    iam_instance_profile   = "${ var.in_iam_instance_profile }"
+    key_name               = "${ element( aws_key_pair.ssh.*.id, 0 ) }"
+
     ami                    = "${ var.in_ami_id }"
     subnet_id              = "${ element( var.in_subnet_ids, count.index ) }"
-    user_data              = "${ var.in_user_data }"
     vpc_security_group_ids = [ "${ var.in_security_group_ids }" ]
-    iam_instance_profile   = "${ var.in_iam_instance_profile }"
-    key_name = "${ element( aws_key_pair.ssh.*.id, 0 ) }"
+    instance_type          = "${ var.in_instance_type }"
 
     tags
     {

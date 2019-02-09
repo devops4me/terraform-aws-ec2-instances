@@ -45,6 +45,17 @@ variable "in_instance_type"
 }
 
 
+### #################################### ###
+### [[variable]] in_iam_instance_profile ###
+### #################################### ###
+
+variable "in_iam_instance_profile"
+{
+    description = "The ec2 instance role access policies profile (see module terraform-aws-ec2-instance-profile)."
+    default = ""
+}
+
+
 ### ############# ###
 ### in_subnet_ids ###
 ### ############# ###
@@ -78,6 +89,26 @@ variable in_ssh_public_key
 }
 
 
+/*
+ | --
+ | -- IMPORTANT - DO NOT LET TERRAFORM BRING UP EC2 INSTANCES INSIDE PRIVATE
+ | -- SUBNETS BEFORE (SLOW TO CREATE) NAT GATEWAYS ARE UP AND RUNNING.
+ | --
+ | -- Suppose systemd on bootup wants to get a rabbitmq docker image as
+ | -- specified by a service unit file. Terraform will quickly bring up ec2
+ | -- instances and then proceed to slowly create NAT gateways. To avoid
+ | -- these types of bootup errors we must declare explicit dependencies to
+ | -- delay ec2 creation until the private gateways and routes are ready.
+ | --
+*/
+variable in_route_dependency
+{
+    description = "Aids creation of explicit dependency for instances brought up in private subnets."
+    type        = "list"
+    default     = [ "xxxxxx" ]
+}
+
+
 ### ################# ###
 ### in_ecosystem_name ###
 ### ################# ###
@@ -105,24 +136,4 @@ variable in_tag_timestamp
 variable in_tag_description
 {
     description = "Ubiquitous note detailing who, when, where and why for every infrastructure component."
-}
-
-
-/*
- | --
- | -- IMPORTANT - DO NOT LET TERRAFORM BRING UP EC2 INSTANCES INSIDE PRIVATE
- | -- SUBNETS BEFORE (SLOW TO CREATE) NAT GATEWAYS ARE UP AND RUNNING.
- | --
- | -- Suppose systemd on bootup wants to get a rabbitmq docker image as
- | -- specified by a service unit file. Terraform will quickly bring up ec2
- | -- instances and then proceed to slowly create NAT gateways. To avoid
- | -- these types of bootup errors we must declare explicit dependencies to
- | -- delay ec2 creation until the private gateways and routes are ready.
- | --
-*/
-variable in_route_dependency
-{
-    description = "Aids creation of explicit dependency for instances brought up in private subnets."
-    type        = "list"
-    default     = [ "xxxxxx" ]
 }

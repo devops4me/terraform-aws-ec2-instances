@@ -33,9 +33,10 @@ module instance-cluster
 resource tls_private_key generated
 {
     algorithm   = "ECDSA"
-    ecdsa_curve = "P521"
+    ecdsa_curve = "P384"
 }
-
+# algorithm = "RSA"
+#  rsa_bits  = 4096
 
 module rabbitmq-cloud-config
 {

@@ -16,23 +16,23 @@
  | -- over instance creation within private subnets.
  | --
 */
-resource aws_instance nodes
-{
-    count = "${var.in_node_count}"
+resource aws_instance nodes {
 
-    user_data              = "${ var.in_user_data }"
-    iam_instance_profile   = "${ var.in_iam_instance_profile }"
-    key_name               = "${ aws_key_pair.ssh.id }"
+    count = var.in_node_count
 
-    ami                    = "${ var.in_ami_id }"
-    subnet_id              = "${ element( var.in_subnet_ids, count.index ) }"
-    vpc_security_group_ids = [ "${ var.in_security_group_ids }" ]
-    instance_type          = "${ var.in_instance_type }"
+    user_data              = var.in_user_data
+    iam_instance_profile   = var.in_iam_instance_profile
+    key_name               = aws_key_pair.ssh.id
+
+    ami                    = var.in_ami_id
+    subnet_id              = element( var.in_subnet_ids, count.index )
+    vpc_security_group_ids = [ var.in_security_group_ids ]
+    instance_type          = var.in_instance_type
 
     tags
     {
         Name     = "ec2-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }-${ ( count.index + 1 ) }"
-        Class    = "${ var.in_ecosystem_name }"
+        Class    = var.in_ecosystem_name
         Instance = "${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
         Desc     = "This cluster node no.${ ( count.index + 1 ) } of ${ var.in_node_count } for ${ var.in_ecosystem_name } ${ var.in_tag_description }"
         Depend   = "Either default or actual dependency to ensure the instance is created after NAT gateway ${ element( var.in_route_dependency, count.index ) } in subnet ${ element( var.in_subnet_ids, count.index ) }."
@@ -48,8 +48,8 @@ resource aws_instance nodes
  | -- from the public repository.
  | --
 */
-resource aws_key_pair ssh
-{
+resource aws_key_pair ssh {
+
     key_name = "key-4-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
-    public_key = "${ var.in_ssh_public_key }"
+    public_key = var.in_ssh_public_key
 }

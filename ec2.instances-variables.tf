@@ -8,18 +8,16 @@
 ### [[variable]] in_node_count ###
 ### ########################## ###
 
-variable in_node_count
-{
+variable in_node_count {
     description = "The number of nodes that this fixed size ec2 instance cluster should bring up."
-    default     = "4"
+    default     = 4
 }
 
 ### ######### ###
 ### in_ami_id ###
 ### ######### ###
 
-variable in_ami_id
-{
+variable in_ami_id {
     description = "The ID of the EC2 machine image (AMI) that each instance will boot up from."
 }
 
@@ -28,8 +26,7 @@ variable in_ami_id
 ### in_user_data ###
 ### ############ ###
 
-variable in_user_data
-{
+variable in_user_data {
     description = "The body of text responsible for bootrapping the node."
 }
 
@@ -38,8 +35,7 @@ variable in_user_data
 ### [[variable]] in_instance_type ###
 ### ############################# ###
 
-variable "in_instance_type"
-{
+variable in_instance_type {
     description = "The ec2 instance type (default is t2.medium) that will make up the fixed size ec2 cluster nodes."
     default = "t2.medium"
 }
@@ -49,8 +45,7 @@ variable "in_instance_type"
 ### [[variable]] in_iam_instance_profile ###
 ### #################################### ###
 
-variable "in_iam_instance_profile"
-{
+variable in_iam_instance_profile {
     description = "The ec2 instance role access policies profile (see module terraform-aws-ec2-instance-profile)."
     default = ""
 }
@@ -60,10 +55,9 @@ variable "in_iam_instance_profile"
 ### in_subnet_ids ###
 ### ############# ###
 
-variable in_subnet_ids
-{
+variable in_subnet_ids {
     description = "The list of subnet IDs each instance will join using modulus wrap-round arithmetic."
-    type        = "list"
+    type        = list
 }
 
 
@@ -71,10 +65,9 @@ variable in_subnet_ids
 ### in_security_group_ids ###
 ### ##################### ###
 
-variable in_security_group_ids
-{
+variable in_security_group_ids {
     description = "The identifiers of the (usually 1) security group that the nodes will identify with."
-    type        = "list"
+    type        = list
 }
 
 
@@ -82,8 +75,7 @@ variable in_security_group_ids
 ### in_ssh_public_key ###
 ### ################# ###
 
-variable in_ssh_public_key
-{
+variable in_ssh_public_key {
     description = "The public key for accessing both the DMZ bastion and the nodes behind enemy lines."
 ##############################    default = ""
 }
@@ -101,10 +93,9 @@ variable in_ssh_public_key
  | -- delay ec2 creation until the private gateways and routes are ready.
  | --
 */
-variable in_route_dependency
-{
+variable in_route_dependency {
     description = "Aids creation of explicit dependency for instances brought up in private subnets."
-    type        = "list"
+    type        = list
     default     = [ "xxxxxx" ]
 }
 
@@ -113,8 +104,7 @@ variable in_route_dependency
 ### in_ecosystem_name ###
 ### ################# ###
 
-variable in_ecosystem_name
-{
+variable in_ecosystem_name {
     description = "Creational stamp binding all infrastructure components created on behalf of this ecosystem instance."
 }
 
@@ -123,8 +113,7 @@ variable in_ecosystem_name
 ### in_tag_timestamp ###
 ### ################ ###
 
-variable in_tag_timestamp
-{
+variable in_tag_timestamp {
     description = "A timestamp for resource tags in the format ymmdd-hhmm like 80911-1435"
 }
 
@@ -133,7 +122,6 @@ variable in_tag_timestamp
 ### in_tag_description ###
 ### ################## ###
 
-variable in_tag_description
-{
+variable in_tag_description {
     description = "Ubiquitous note detailing who, when, where and why for every infrastructure component."
 }

@@ -29,8 +29,7 @@ resource aws_instance nodes {
     vpc_security_group_ids = [ var.in_security_group_ids ]
     instance_type          = var.in_instance_type
 
-    tags
-    {
+    tags = {
         Name     = "ec2-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }-${ ( count.index + 1 ) }"
         Class    = var.in_ecosystem_name
         Instance = "${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"

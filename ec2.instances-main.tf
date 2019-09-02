@@ -26,7 +26,8 @@ resource aws_instance nodes {
 
     ami                    = var.in_ami_id
     subnet_id              = element( var.in_subnet_ids, count.index )
-    vpc_security_group_ids = [ var.in_security_group_ids ]
+##################    vpc_security_group_ids = [ var.in_security_group_ids ]
+    vpc_security_group_ids = var.in_security_group_ids
     instance_type          = var.in_instance_type
 
     tags = {

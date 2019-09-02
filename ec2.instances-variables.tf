@@ -28,6 +28,7 @@ variable in_ami_id {
 
 variable in_user_data {
     description = "The body of text responsible for bootrapping the node."
+    default = ""
 }
 
 
@@ -77,7 +78,6 @@ variable in_security_group_ids {
 
 variable in_ssh_public_key {
     description = "The public key for accessing both the DMZ bastion and the nodes behind enemy lines."
-##############################    default = ""
 }
 
 

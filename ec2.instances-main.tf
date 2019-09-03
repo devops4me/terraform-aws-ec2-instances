@@ -52,6 +52,6 @@ resource aws_instance nodes {
 */
 resource aws_key_pair ssh {
 
-    key_name = "key-4-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
+    key_name = "vm-key-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
     public_key = var.in_ssh_public_key
 }

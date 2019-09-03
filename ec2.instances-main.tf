@@ -26,17 +26,19 @@ resource aws_instance nodes {
 
     ami                    = var.in_ami_id
     subnet_id              = element( var.in_subnet_ids, count.index )
-##################    vpc_security_group_ids = [ var.in_security_group_ids ]
     vpc_security_group_ids = var.in_security_group_ids
     instance_type          = var.in_instance_type
 
-    tags = {
-        Name     = "ec2-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }-${ ( count.index + 1 ) }"
-        Class    = var.in_ecosystem_name
-        Instance = "${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
-        Desc     = "This cluster node no.${ ( count.index + 1 ) } of ${ var.in_node_count } for ${ var.in_ecosystem_name } ${ var.in_tag_description }"
-        Depend   = "Either default or actual dependency to ensure the instance is created after NAT gateway ${ element( var.in_route_dependency, count.index ) } in subnet ${ element( var.in_subnet_ids, count.index ) }."
-    }
+    tags = merge(
+        {
+            Name = "ec2-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }-${ ( count.index + 1 ) }"
+            Desc = "This cluster node no.${ ( count.index + 1 ) } of ${ var.in_node_count } for ${ var.in_ecosystem_name } ${ var.in_tag_description }"
+            Depend   = "Either default or actual dependency to ensure the instance is created after NAT gateway ${ element( var.in_route_dependency, count.index ) } in subnet ${ element( var.in_subnet_ids, count.index ) }."
+        },
+        var.in_mandated_tags
+    )
+
+
 }
 
 

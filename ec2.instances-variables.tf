@@ -125,3 +125,15 @@ variable in_tag_timestamp {
 variable in_tag_description {
     description = "Ubiquitous note detailing who, when, where and why for every infrastructure component."
 }
+
+
+### ############################## ###
+### [[variable]] in_mandated_tags ###
+### ############################## ###
+
+variable in_mandated_tags {
+
+    description = "Optional tags unless your organization mandates that a set of given tags must be set."
+    type        = map
+    default     = { }
+}

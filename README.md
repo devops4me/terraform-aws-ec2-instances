@@ -1,74 +1,79 @@
-# ec2 instance cluster | fixed size
 
-This reusable module **creates a fixed number of ec2 instances** as opposed to its sister module that creates an **auto-scaling ec2 instance cluster**. Like its sister, you need to tell this module which AMI to use and also give it the user data necessary to boostrap each node.
+# Create One or More EC2 Instances
+
+This reusable module **creates a fixed number of ec2 instances** as opposed to its sister module that creates an **auto-scaling ec2 instance cluster**. Like its sister, you need to tell this module
+- which AMI to use
+- the instance profiles that allow access to AWS resources
+- the SSH public key for accessing the instance
+- the user data that will bootstrap the waking instance
+- the public/private subnets (hence zones) each instance is in
+- the security groups to constrain ingress and egress traffic
 
 
-## Usage
+## Module Usage
+
+    module ec2-instances
+    {
+        source  = "devops4me/ec2-instances/aws"
+        version = "~> 1.0.0"
+
+        in_vpc_cidr            = "10.245.0.0/16"
+        in_num_private_subnets = 6
+        in_num_public_subnets  = 3
+    }
+
+
+---
+
 
 ## Module Inputs
 
-## Module Outputs
+| Input Variable             | Type    | Description                                                   | Default        |
+|:-------------------------- |:-------:|:------------------------------------------------------------- |:--------------:|
+| **`in_vpc_cidr`**          | string  | The VPC's Cidr defining the range of available IP addresses   | 10.42.0.0/16   |
+| **`in_num_private_subnets`** | number | Number of private subnets to create across availability zones | 3              |
+| **`in_num_public_subnets`**  | number | Number of public subnets to create across availability zones. If one or more an internet gateway and route to the internet will be created regardless of the value of the in_create_gateway boolean variable. | 3 |
+| **`in_create_public_gateway`** | bool | if true create an internet gateway and routes so services can access the internet. | true |
+| **`in_create_private_gateway`** | bool | if true creates a NAT gateway and private routes for egress access from private subnets. | true |
+| **`in_subnets_max`** | number | 2 to the power of this is the [max number of carvable subnets](https://www.devopswiki.co.uk/vpc/network-cidr) So 2<sup>4</sup> = 16 subnets | 4 |
 
-## Ignition User Data Input Example
 
-Ignition config is in JSON format and is not designed to be human readable. This example demonstrates how the terraform ignition provider reads the systemd unit files and then **transpiles it** to the JSON code below which is passed into the **user data input variable** in this module.
+### Optional Resource Tag Inputs
 
-### The SystemD Unit File
+Most organisations have a mandatory set of tags that must be placed on AWS resources for cost and billing reports. Typically they denote owners and specify whether environments are prod or non-prod.
 
-```ini
-[Unit]
-Description=Sets up the inbuilt CoreOS etcd 3 key value store
-Requires=coreos-metadata.service
-After=coreos-metadata.service
+| Input Variable    | Variable Description | Input Example
+|:----------------- |:-------------------- |:----- |
+**`in_ecosystem`** | the ecosystem (environment) name these resources belong to | **`my-app-test`** or **`kubernetes-cluster`**
+**`in_timestamp`** | the timestamp in resource names helps you identify which environment instance resources belong to | **`1911021435`** as **`$(date +%y%m%d%H%M%S)`**
+**`in_description`** | a human readable description usually stating who is creating the resource and when and where | "was created by $USER@$HOSTNAME on $(date)."
 
-[Service]
-EnvironmentFile=/run/metadata/coreos
-ExecStart=/usr/lib/coreos/etcd-wrapper $ETCD_OPTS \
-  --listen-peer-urls="http://$${COREOS_EC2_IPV4_LOCAL}:2380" \
-  --listen-client-urls="http://0.0.0.0:2379" \
-  --initial-advertise-peer-urls="http://$${COREOS_EC2_IPV4_LOCAL}:2380" \
-  --advertise-client-urls="http://$${COREOS_EC2_IPV4_LOCAL}:2379" \
-  --discovery="${file_discovery_url}"
+Try **`echo $(date +%y%m%d%H%M%S)`** to check your timestamp and **`echo "was created by $USER@$HOSTNAME on $(date)."`** to check your description. Here is how you can send these values to terraform.
+
+```
+export TF_VAR_in_timestamp=$(date +%y%m%d%H%M%S)
+export TF_VAR_in_description="was created by $USER@$HOSTNAME on $(date)."
 ```
 
-### The Transpiled Ignition Configuration
 
-```json
-{
-   "ignition":{
-      "config":{
+---
 
-      },
-      "timeouts":{
 
-      },
-      "version":"2.1.0"
-   },
-   "networkd":{
+## output variables
 
-   },
-   "passwd":{
+Here are the most popular **output variables** exported from this VPC and subnet creating module.
 
-   },
-   "storage":{
+| Exported | Type | Example | Comment |
+|:-------- |:---- |:------- |:------- |
+**`out_vpc_id`** | String | vpc-1234567890 | the **VPC id** of the just-created VPC
+**`out_rtb_id`** | String | "rtb-2468013579" | ID of the VPC's default route table
+**`out_subnet_ids`** | List of Strings | [ "subnet-545123498798345", "subnet-83507325124987" ] | list of **all private and public** subnet ids
+**`out_private_subnet_ids`** | List of Strings | [ "subnet-545123498798345", "subnet-83507325124987" ] | list of **private** subnet ids
+**`out_public_subnet_ids`** | List of Strings |  [ "subnet-945873408204034", "subnet-8940202943031" ] | list of **public** subnet ids
 
-   },
-   "systemd":{
-      "units":[
-         {
-            "dropins":[
-               {
-                  "contents":"[Unit]\nDescription=Sets up the inbuilt CoreOS etcd 3 key value store\nRequires=coreos-metadata.service\nAfter=coreos-metadata.service\n\n[Service]\nEnvironmentFile=/run/metadata/coreos\nExecStart=\nExecStart=/usr/lib/coreos/etcd-wrapper $ETCD_OPTS \\\n  --listen-peer-urls=\"http://${COREOS_EC2_IPV4_LOCAL}:2380\" \\\n  --listen-client-urls=\"http://0.0.0.0:2379\" \\\n  --initial-advertise-peer-urls=\"http://${COREOS_EC2_IPV4_LOCAL}:2380\" \\\n  --advertise-client-urls=\"http://${COREOS_EC2_IPV4_LOCAL}:2379\" \\\n  --discovery=\"https://discovery.etcd.io/93d2817eddad15fe6ba844e292e5c11a\"\n",
-                  "name":"20-clct-etcd-member.conf"
-               }
-            ],
-            "enabled":true,
-            "name":"etcd-member.service"
-         }
-      ]
-   }
-}
-```
+
+---
+
 
 ## Architecture | The 3 Layers of a Cluster
 

@@ -4,9 +4,9 @@
 ### #################################################### ###
 
 
-### ########################## ###
-### [[variable]] in_node_count ###
-### ########################## ###
+### ############# ###
+### in_node_count ###
+### ############# ###
 
 variable in_node_count {
     description = "The number of nodes that this fixed size ec2 instance cluster should bring up."
@@ -32,9 +32,9 @@ variable in_user_data {
 }
 
 
-### ############################# ###
-### [[variable]] in_instance_type ###
-### ############################# ###
+### ################ ###
+### in_instance_type ###
+### ################ ###
 
 variable in_instance_type {
     description = "The ec2 instance type (default is t2.medium) that will make up the fixed size ec2 cluster nodes."
@@ -42,9 +42,9 @@ variable in_instance_type {
 }
 
 
-### #################################### ###
-### [[variable]] in_iam_instance_profile ###
-### #################################### ###
+### ####################### ###
+### in_iam_instance_profile ###
+### ####################### ###
 
 variable in_iam_instance_profile {
     description = "The ec2 instance role access policies profile (see module terraform-aws-ec2-instance-profile)."
@@ -100,40 +100,46 @@ variable in_route_dependency {
 }
 
 
-### ################# ###
-### in_ecosystem_name ###
-### ################# ###
-
-variable in_ecosystem_name {
-    description = "Creational stamp binding all infrastructure components created on behalf of this ecosystem instance."
-}
-
-
 ### ################ ###
-### in_tag_timestamp ###
+### in_mandated_tags ###
 ### ################ ###
-
-variable in_tag_timestamp {
-    description = "A timestamp for resource tags in the format ymmdd-hhmm like 80911-1435"
-}
-
-
-### ################## ###
-### in_tag_description ###
-### ################## ###
-
-variable in_tag_description {
-    description = "Ubiquitous note detailing who, when, where and why for every infrastructure component."
-}
-
-
-### ############################## ###
-### [[variable]] in_mandated_tags ###
-### ############################## ###
 
 variable in_mandated_tags {
 
     description = "Optional tags unless your organization mandates that a set of given tags must be set."
     type        = map
     default     = { }
+}
+
+
+### ############ ###
+### in_ecosystem ###
+### ############ ###
+
+variable in_ecosystem {
+    description = "Creational stamp binding all infrastructure components created on behalf of this ecosystem instance."
+    default = "security-grp"
+    type    = string
+}
+
+
+### ############ ###
+### in_timestamp ###
+### ############ ###
+
+variable in_timestamp {
+    description = "A timestamp for resource tags in the format ymmdd-hhmm like 80911-1435"
+    default     = "timestamp"
+    type        = string
+}
+
+
+### ############## ###
+### in_description ###
+### ############## ###
+
+variable in_description {
+    description = "Ubiquitous note detailing who, when, where and why for every infrastructure component."
+    default     = "This VPC network was created for an ecosystem."
+    type        = string
 }

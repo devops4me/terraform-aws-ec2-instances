@@ -31,8 +31,8 @@ resource aws_instance nodes {
 
     tags = merge(
         {
-            Name = "ec2-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }-${ ( count.index + 1 ) }"
-            Desc = "This cluster node no.${ ( count.index + 1 ) } of ${ var.in_node_count } for ${ var.in_ecosystem_name } ${ var.in_tag_description }"
+            Name = "ec2-${ var.in_ecosystem }-${ var.in_timestamp }-${ ( count.index + 1 ) }"
+            Desc = "This cluster node no.${ ( count.index + 1 ) } of ${ var.in_node_count } for ${ var.in_ecosystem } ${ var.in_description }"
             Depend   = "Either default or actual dependency to ensure the instance is created after NAT gateway ${ element( var.in_route_dependency, count.index ) } in subnet ${ element( var.in_subnet_ids, count.index ) }."
         },
         var.in_mandated_tags
@@ -52,6 +52,6 @@ resource aws_instance nodes {
 */
 resource aws_key_pair ssh {
 
-    key_name = "vm-key-${ var.in_ecosystem_name }-${ var.in_tag_timestamp }"
+    key_name = "vm-key-${ var.in_ecosystem }-${ var.in_timestamp }"
     public_key = var.in_ssh_public_key
 }
